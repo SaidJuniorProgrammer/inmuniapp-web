@@ -7,7 +7,6 @@ import {
   Users, 
   HeartHandshake, 
   CalendarClock,
-  CheckCircle2,
   Download,
   FileText,
   ExternalLink,
@@ -346,105 +345,112 @@ export default function EsquemaVacunacion() {
   };
 
   const grupoSeleccionado = gruposEtarios[grupoActivo];
+  const entriesGrupos = Object.entries(gruposEtarios);
 
   return (
-    <section id="esquema" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="esquema" className="max-w-7xl mx-auto px-4 sm:px-6 py-14 md:py-20 overflow-hidden">
       
       {/* 1. ENCABEZADO PRINCIPAL */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-400/15 border border-cyan-300/30 text-cyan-200 text-xs font-semibold tracking-wide uppercase mb-4">
-          <Sparkles className="w-4 h-4 text-cyan-300" /> Ministerio de Salud Pública del Ecuador
+      <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-400/15 border border-cyan-300/30 text-cyan-200 text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-4">
+          <Sparkles className="w-3.5 h-3.5 text-cyan-300 shrink-0" /> Ministerio de Salud Pública del Ecuador
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-3 sm:mb-4 leading-tight">
           Esquema Nacional de Vacunación <span className="text-sky-300">2025</span>
         </h2>
-        <p className="text-sky-100/85 text-base md:text-lg">
+        <p className="text-sky-100/85 text-sm sm:text-base md:text-lg">
           Selecciona la edad de tu hijo o familiar para conocer de forma clara qué vacunas le corresponden y de qué enfermedades lo protegen.
         </p>
       </div>
 
-      {/* 2. PESTAÑAS DE EDAD GRANDES Y AMIGABLES (PRIMERO LO MÁS IMPORTANTE) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
-        {Object.entries(gruposEtarios).map(([key, grupo]) => {
+      {/* 2. PESTAÑAS DE EDAD RESPONSIVE */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+        {entriesGrupos.map(([key, grupo], index) => {
           const IconComponent = grupo.icono;
           const activo = grupoActivo === key;
+          const esUltimoEnMovil = index === entriesGrupos.length - 1;
           return (
             <button
               key={key}
               onClick={() => setGrupoActivo(key)}
-              className={`flex flex-col items-center justify-center p-4 rounded-2xl font-bold text-sm transition-all cursor-pointer text-center border ${
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer text-center border ${
+                esUltimoEnMovil ? 'col-span-2 sm:col-span-1' : ''
+              } ${
                 activo
-                  ? 'bg-white text-[#0b253c] border-white shadow-xl scale-[1.02]'
+                  ? 'bg-white text-[#0b253c] border-white shadow-xl sm:scale-[1.02]'
                   : 'bg-white/10 text-sky-100 hover:bg-white/15 border-white/15'
               }`}
             >
-              <IconComponent className={`w-6 h-6 mb-2 ${activo ? 'text-[#16426b]' : 'text-sky-300'}`} />
-              <span>{grupo.nombre}</span>
+              <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 mb-1.5 sm:mb-2 ${activo ? 'text-[#16426b]' : 'text-sky-300'}`} />
+              <span className="leading-snug">{grupo.nombre}</span>
             </button>
           );
         })}
       </div>
 
-      {/* 3. TARJETAS DE VACUNAS POR ETAPA (DISEÑO LIMPIO TIPO LÍNEA DE TIEMPO) */}
-      <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl mb-14">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/15 pb-5 mb-8">
+      {/* 3. TARJETAS DE VACUNAS POR ETAPA */}
+      <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 md:p-8 shadow-2xl mb-12 sm:mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 pb-4 sm:pb-5 mb-5 sm:mb-8">
           <div>
-            <h3 className="text-2xl font-extrabold text-white">{grupoSeleccionado.nombre}</h3>
-            <p className="text-sm text-sky-200/85">{grupoSeleccionado.subtitulo}</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-white">{grupoSeleccionado.nombre}</h3>
+            <p className="text-xs sm:text-sm text-sky-200/85 mt-0.5">{grupoSeleccionado.subtitulo}</p>
           </div>
-          <div className="flex items-center gap-2 text-xs text-cyan-200 bg-cyan-400/15 border border-cyan-300/30 px-3.5 py-2 rounded-xl self-start sm:self-auto">
+          <div className="flex items-center gap-2 text-[11px] sm:text-xs text-cyan-200 bg-cyan-400/15 border border-cyan-300/30 px-3 py-2 rounded-xl self-start sm:self-auto">
             <Sparkles className="w-4 h-4 text-cyan-300 shrink-0" />
-            <span>Las vacunas con borde celeste son <strong>Actualizaciones 2025</strong></span>
+            <span>Borde celeste = <strong>Actualización 2025</strong></span>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {grupoSeleccionado.etapas.map((etapa, i) => (
-            <div key={i} className="rounded-2xl bg-[#0b253c]/50 border border-white/10 p-5 md:p-6">
+            <div key={i} className="rounded-2xl bg-[#0b253c]/55 border border-white/10 p-3.5 sm:p-5 md:p-6">
               
               {/* Título de la edad */}
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-5 pb-3 border-b border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-sky-400/20 border border-sky-300/30 flex items-center justify-center text-sky-300 font-bold text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4 sm:mb-5 pb-3 border-b border-white/10">
+                <div className="flex items-start sm:items-center gap-2.5">
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-sky-400/20 border border-sky-300/30 flex items-center justify-center text-sky-300 font-bold text-xs sm:text-sm shrink-0 mt-0.5 sm:mt-0">
                     {i + 1}
                   </span>
-                  <div>
-                    <h4 className="text-lg font-extrabold text-white leading-none">{etapa.edad}</h4>
-                    <span className="text-xs text-sky-200/75">{etapa.tiempo}</span>
+                  <div className="min-w-0">
+                    <h4 className="text-base sm:text-lg font-extrabold text-white leading-snug break-words">
+                      {etapa.edad}
+                    </h4>
+                    <span className="text-xs text-sky-200/75 block">{etapa.tiempo}</span>
                   </div>
                 </div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-sky-200">
+                <span className="self-start sm:self-auto text-[11px] sm:text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-sky-200 shrink-0">
                   {etapa.vacunas.length} {etapa.vacunas.length === 1 ? 'vacuna en esta etapa' : 'vacunas en esta etapa'}
                 </span>
               </div>
 
               {/* Tarjetas de cada vacuna */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
                 {etapa.vacunas.map((vacuna, j) => (
                   <div
                     key={j}
-                    className={`p-5 rounded-2xl border transition flex flex-col justify-between ${
+                    className={`p-4 sm:p-5 rounded-2xl border transition flex flex-col justify-between overflow-hidden ${
                       vacuna.esActualizada
                         ? 'bg-gradient-to-br from-cyan-500/20 via-sky-500/10 to-transparent border-cyan-300/45 shadow-lg'
                         : 'bg-white/5 border-white/10 hover:bg-white/10'
                     }`}
                   >
                     <div>
-                      {/* Cabecera de la vacuna */}
-                      <div className="flex items-start justify-between gap-2 mb-3">
-                        <span className="font-extrabold text-base text-white flex items-center gap-2">
+                      {/* Cabecera de la vacuna: apilada o flexible sin desbordar en móvil */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <span className="font-extrabold text-sm sm:text-base text-white flex items-center gap-1.5 min-w-0 break-words">
                           <Syringe className="w-4 h-4 text-sky-300 shrink-0" />
-                          {vacuna.nombre}
+                          <span className="leading-snug">{vacuna.nombre}</span>
                         </span>
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/15 text-sky-100 shrink-0">
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-sky-100 max-w-full break-words leading-tight">
                           {vacuna.dosis}
                         </span>
                       </div>
 
                       {/* Etiqueta amigable si hubo cambio en 2025 */}
                       {vacuna.esActualizada && vacuna.cambioTexto && (
-                        <div className="mb-3 inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-cyan-300 text-[#0b253c]">
-                          <Sparkles className="w-3 h-3" /> {vacuna.cambioTexto}
+                        <div className="mb-3 inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1.5 rounded-lg bg-cyan-300 text-[#0b253c] max-w-full">
+                          <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                          <span className="leading-tight break-words">{vacuna.cambioTexto}</span>
                         </div>
                       )}
 
@@ -464,21 +470,21 @@ export default function EsquemaVacunacion() {
       </div>
 
       {/* 4. RESUMEN VISUAL AMIGABLE: ¿QUÉ MEJORÓ EN EL ESQUEMA 2025? */}
-      <div className="mb-14">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <h3 className="text-2xl font-extrabold text-white mb-2">
+      <div className="mb-12 sm:mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-2">
             ¿Qué mejoró en el Esquema 2025 frente al anterior?
           </h3>
-          <p className="text-sm text-sky-200/80">
+          <p className="text-xs sm:text-sm text-sky-200/80">
             El Ministerio de Salud Pública actualizó 5 puntos clave para brindar mayor protección con menos aplicaciones:
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
           {mejorasAmigables.map((item, idx) => (
             <div 
               key={idx} 
-              className={`p-5 rounded-2xl bg-gradient-to-br ${item.color} border backdrop-blur-md flex flex-col justify-between`}
+              className={`p-4 sm:p-5 rounded-2xl bg-gradient-to-br ${item.color} border backdrop-blur-md flex flex-col justify-between`}
             >
               <div>
                 <span className="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/15 text-white mb-3">
@@ -505,44 +511,44 @@ export default function EsquemaVacunacion() {
       </div>
 
       {/* 5. SECCIÓN DE DESCARGA DEL PDF OFICIAL DEL MSP */}
-      <div className="p-7 md:p-9 rounded-3xl bg-gradient-to-r from-[#0b253c] via-[#133e68] to-[#0b253c] border border-cyan-300/35 shadow-2xl">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+      <div className="p-5 sm:p-7 md:p-9 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#0b253c] via-[#133e68] to-[#0b253c] border border-cyan-300/35 shadow-2xl">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
           
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-cyan-400/20 border border-cyan-300/40 flex items-center justify-center shrink-0 shadow-inner">
-              <FileText className="w-8 h-8 text-cyan-300" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-cyan-400/20 border border-cyan-300/40 flex items-center justify-center shrink-0 shadow-inner">
+              <FileText className="w-7 h-7 sm:w-8 sm:h-8 text-cyan-300" />
             </div>
             <div>
-              <span className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-0.5 rounded-full bg-cyan-400/20 text-cyan-200 border border-cyan-300/30 mb-2">
+              <span className="inline-block text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 py-0.5 rounded-full bg-cyan-400/20 text-cyan-200 border border-cyan-300/30 mb-2">
                 Material Oficial Descargable
               </span>
-              <h3 className="text-xl md:text-2xl font-extrabold text-white mb-1">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold text-white mb-1">
                 Descargar Esquema Nacional de Vacunación 2025 (PDF)
               </h3>
-              <p className="text-sm text-sky-100/80 max-w-2xl">
+              <p className="text-xs sm:text-sm text-sky-100/80 max-w-2xl leading-relaxed">
                 Guarda en tu celular o imprime la tabla oficial completa del Ministerio de Salud Pública del Ecuador para tenerla siempre a mano antes de cada control médico.
               </p>
             </div>
           </div>
 
           {/* Botones de Ver y Descargar */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
             <a
               href="/esquema-vacunacion-2025.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold text-sm transition"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold text-sm transition text-center"
             >
-              <ExternalLink className="w-4 h-4 text-sky-300" />
+              <ExternalLink className="w-4 h-4 text-sky-300 shrink-0" />
               Ver Documento
             </a>
 
             <a
               href="/esquema-vacunacion-2025.pdf"
               download="Esquema-Nacional-Vacunacion-Ecuador-2025.pdf"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-cyan-300 hover:bg-cyan-200 text-[#0b253c] font-extrabold text-sm shadow-lg transition"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-cyan-300 hover:bg-cyan-200 text-[#0b253c] font-extrabold text-sm shadow-lg transition text-center"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 shrink-0" />
               Descargar PDF Oficial
             </a>
           </div>
